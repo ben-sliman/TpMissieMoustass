@@ -11,7 +11,7 @@ import javax.swing.JLabel;
 import javax.swing.JProgressBar;
 import java.awt.FlowLayout;
 
-public class InterfaceGraphique extends JFrame {
+public class InterfaceEnregistrement extends JFrame {
 
     private static final long serialVersionUID = 1L;
     private JPanel contentPane;
@@ -24,7 +24,7 @@ public class InterfaceGraphique extends JFrame {
         EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try {
-                    InterfaceGraphique frame = new InterfaceGraphique();
+                    InterfaceEnregistrement frame = new InterfaceEnregistrement();
                     frame.setVisible(true);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -36,7 +36,7 @@ public class InterfaceGraphique extends JFrame {
     /**
      * Create the frame.
      */
-    public InterfaceGraphique() {
+    public InterfaceEnregistrement() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 450, 300);
         contentPane = new JPanel();
