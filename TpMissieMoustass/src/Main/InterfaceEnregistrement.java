@@ -9,7 +9,8 @@ import java.awt.event.ActionListener; // Interface pour gérer les événements 
 import java.awt.event.ActionEvent; // Classe pour représenter un événement utilisateur
 import javax.swing.JLabel; // Composant pour afficher du texte statique ou dynamique
 import javax.swing.JProgressBar; // Barre de progression
-import java.awt.FlowLayout; // Gère la disposition des composants dans un panneau
+import java.awt.FlowLayout;
+import java.awt.Color; // Gère la disposition des composants dans un panneau
 
 /**
  * Classe principale pour créer une interface graphique permettant
@@ -52,6 +53,7 @@ public class InterfaceEnregistrement extends JFrame {
 
 		// Crée le panneau principal et ajoute une bordure vide
 		contentPane = new JPanel();
+		contentPane.setBackground(new Color(199, 254, 204));
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
 		// Spécifie le panneau principal comme conteneur de contenu
