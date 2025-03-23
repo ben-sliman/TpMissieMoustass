@@ -14,6 +14,7 @@ import java.awt.Color; // Gère la disposition des composants dans un panneau
 import javax.sound.sampled.*; // API Java pour capturer et gérer les sons
 import java.io.File; // Gestion des fichiers
 import java.io.IOException; // Gestion des exceptions liées aux entrées/sorties
+import javax.swing.Timer; // Timer pour mettre à jour le temps écoulé
 
 /**
  * Classe principale pour créer une interface graphique permettant
@@ -23,10 +24,12 @@ public class InterfaceEnregistrement extends JFrame {
 
     private static final long serialVersionUID = 1L; // Identifiant pour la sérialisation
     private JPanel contentPane; // Le panneau principal qui contient tous les composants
-    private final JLabel lblNewLabel = new JLabel("Enregistrement en cours..."); // Indique l'état de l'enregistrement
+    private final JLabel lblNewLabel = new JLabel("Temps d'enregistrement : 0 s"); // Indique l'état de l'enregistrement et le temps écoulé
     private TargetDataLine line; // Ligne de données cible pour capturer l'audio
     private AudioFileFormat.Type fileType = AudioFileFormat.Type.WAVE; // Type de fichier pour l'audio (WAV)
     private File audioFile = new File("enregistrement.wav"); // Fichier où l'audio sera sauvegardé
+    private Timer timer; // Timer pour mettre à jour le compteur de temps
+    private int elapsedSeconds = 0; // Compteur de secondes écoulées
 
     /**
      * Méthode principale pour lancer l'application.
@@ -83,7 +86,7 @@ public class InterfaceEnregistrement extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 // Action : Démarrer l'enregistrement
                 startRecording();
-                lblNewLabel.setText("Enregistrement en cours...");
+                lblNewLabel.setText("Enregistrement en cours... Temps : 0 s");
             }
         });
         contentPane.add(btnStartRecording); // Ajoute le bouton au panneau
@@ -94,7 +97,7 @@ public class InterfaceEnregistrement extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 // Action : Arrêter l'enregistrement
                 stopRecording();
-                lblNewLabel.setText("Enregistrement arrêté.");
+                lblNewLabel.setText("Enregistrement arrêté. Temps total : " + elapsedSeconds + " s");
             }
         });
         contentPane.add(btnStopRecording); // Ajoute le bouton au panneau
@@ -135,6 +138,17 @@ public class InterfaceEnregistrement extends JFrame {
                 }
             });
             recordingThread.start(); // Démarrer l'enregistrement
+
+            // Démarrer le timer qui met à jour le compteur de temps chaque seconde
+            elapsedSeconds = 0;
+            timer = new Timer(1000, new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    elapsedSeconds++;
+                    lblNewLabel.setText("Enregistrement en cours... Temps : " + elapsedSeconds + " s");
+                }
+            });
+            timer.start(); // Démarrer le timer
             System.out.println("Enregistrement démarré");
         } catch (LineUnavailableException ex) {
             ex.printStackTrace();
@@ -149,6 +163,10 @@ public class InterfaceEnregistrement extends JFrame {
             line.stop(); // Arrêter la capture audio
             line.close(); // Fermer la ligne
             System.out.println("Enregistrement arrêté");
+
+            if (timer != null) {
+                timer.stop(); // Arrêter le timer
+            }
         }
     }
 
