@@ -1,173 +1,171 @@
 package Main;
 
-import java.awt.EventQueue; // Utilisé pour s'assurer que l'interface graphique est créée sur le thread principal
-import javax.swing.JFrame; // Classe de base pour créer une fenêtre
-import javax.swing.JPanel; // Conteneur pour organiser les composants
-import javax.swing.border.EmptyBorder; // Définit une bordure vide autour du JPanel
-import javax.swing.JButton; // Boutons pour les interactions utilisateur
-import java.awt.event.ActionListener; // Interface pour gérer les événements des boutons
-import java.awt.event.ActionEvent; // Classe pour représenter un événement utilisateur
-import javax.swing.JLabel; // Composant pour afficher du texte statique ou dynamique
-import javax.swing.JProgressBar; // Barre de progression
+import java.awt.EventQueue;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import javax.swing.JLabel;
+import javax.swing.JProgressBar;
 import java.awt.FlowLayout;
-import java.awt.Color; // Gère la disposition des composants dans un panneau
-import javax.sound.sampled.*; // API Java pour capturer et gérer les sons
-import java.io.File; // Gestion des fichiers
-import java.io.IOException; // Gestion des exceptions liées aux entrées/sorties
-import javax.swing.Timer; // Timer pour mettre à jour le temps écoulé
+import java.awt.Color;
+import javax.sound.sampled.*;
+import java.io.File;
+import java.io.IOException;
+import javax.swing.Timer;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Classe principale pour créer une interface graphique permettant
- * d'enregistrer, arrêter et sauvegarder des fichiers audio.
+ * d'enregistrer, arrêter, sauvegarder et supprimer des fichiers audio.
  */
 public class InterfaceEnregistrement extends JFrame {
 
-    private static final long serialVersionUID = 1L; // Identifiant pour la sérialisation
+    private static final long serialVersionUID = 1L;
+
     /**
      * Le panneau principal qui contient tous les composants de l'interface graphique.
      */
-    private JPanel contentPane; // Le panneau principal qui contient tous les composants
+    private JPanel contentPane;
+
     /**
-     * Indique l'état de l'enregistrement et affiche le temps écoulé en secondes.
-     * Le texte initial est "Temps d'enregistrement : 0 s".
+     * Label pour afficher le temps écoulé pendant l'enregistrement audio.
+     * Indique l'état actuel et le temps écoulé au format texte.
      */
-    private final JLabel lblNewLabel = new JLabel("Temps d'enregistrement : 0 s"); // Indique l'état de l'enregistrement et le temps écoulé
+    private final JLabel lblNewLabel = new JLabel("Temps d'enregistrement : 0 s");
+
     /**
-     * Ligne de données cible pour capturer l'audio à partir d'une source telle qu'un microphone.
+     * Ligne de données cible utilisée pour capturer l'audio à partir d'une source externe.
+     * Cette ligne permet de collecter et de traiter le signal audio enregistré.
      */
-    private TargetDataLine line; // Ligne de données cible pour capturer l'audio
+    private TargetDataLine line;
+
     /**
-     * Type de fichier pour l'audio, ici spécifié comme WAV (format audio Wave).
-     */    
-    private AudioFileFormat.Type fileType = AudioFileFormat.Type.WAVE; // Type de fichier pour l'audio (WAV)
-    /**
-     * Fichier audio où l'enregistrement sera sauvegardé.
-     * Le fichier est initialisé avec le nom "enregistrement.wav".
-     */    
-    private File audioFile = new File("enregistrement.wav"); // Fichier où l'audio sera sauvegardé
-    /**
-     * Timer pour mettre à jour le compteur de temps toutes les secondes pendant l'enregistrement.
+     * Type de fichier audio dans lequel l'enregistrement sera sauvegardé.
+     * Le format utilisé est WAV, adapté à la plupart des utilisations audio.
      */
-    private Timer timer; // Timer pour mettre à jour le compteur de temps
+    private AudioFileFormat.Type fileType = AudioFileFormat.Type.WAVE;
+
     /**
-     * Compteur de secondes écoulées depuis le début de l'enregistrement.
-     * Initialisé à 0.
+     * Fichier audio où sera sauvegardé l'enregistrement.
+     * Le nom du fichier inclut la date et l'heure actuelles pour éviter les doublons.
      */
-    private int elapsedSeconds = 0; // Compteur de secondes écoulées
+    private File audioFile;
+
+    /**
+     * Timer utilisé pour suivre le temps écoulé pendant l'enregistrement.
+     * Met à jour l'affichage chaque seconde.
+     */
+    private Timer timer;
+
+    /**
+     * Compteur représentant le temps écoulé en secondes depuis le début de l'enregistrement.
+     * Initialisé à 0 au démarrage.
+     */
+    private int elapsedSeconds = 0;
 
     /**
      * Méthode principale pour lancer l'application.
-     *
-     * @param args Les arguments de ligne de commande passés au programme.
-     *             Ils peuvent être utilisés pour personnaliser le comportement
-     *             de l'application au démarrage.
+     * 
+     * @param args Arguments de la ligne de commande.
      */
     public static void main(String[] args) {
-        // Utiliser EventQueue pour exécuter le programme sur le thread d'interface
-        // utilisateur
         EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try {
-                    // Crée une instance de la fenêtre et l'affiche
                     InterfaceEnregistrement frame = new InterfaceEnregistrement();
                     frame.setVisible(true);
                 } catch (Exception e) {
-                    e.printStackTrace(); // Affiche les éventuelles erreurs dans la console
+                    e.printStackTrace();
                 }
             }
         });
     }
 
     /**
-     * Constructeur de la classe. Configure la fenêtre principale et ses composants.
+     * Constructeur de la classe InterfaceEnregistrement.
+     * Configure l'interface graphique et initialise les composants nécessaires.
      */
     public InterfaceEnregistrement() {
-        // Définir le comportement de fermeture de la fenêtre
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        // Définir la taille et la position de la fenêtre
         setBounds(100, 100, 450, 300);
 
-        // Crée le panneau principal et ajoute une bordure vide
         contentPane = new JPanel();
         contentPane.setBackground(new Color(199, 254, 204));
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-
-        // Spécifie le panneau principal comme conteneur de contenu
         setContentPane(contentPane);
-
-        // Définit un gestionnaire de disposition pour organiser les composants dans le
-        // panneau
         contentPane.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 
-        // Ajouter une barre de progression (peut être utilisée pour indiquer le statut
-        // d'enregistrement)
         JProgressBar progressBar = new JProgressBar();
         contentPane.add(progressBar);
 
-        // Ajouter le label qui informe de l'état de l'enregistrement
         contentPane.add(lblNewLabel);
 
-        // Ajouter le bouton "Démarrer l'enregistrement"
         JButton btnStartRecording = new JButton("Démarrer l'enregistrement");
         btnStartRecording.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                // Action : Démarrer l'enregistrement
                 startRecording();
                 lblNewLabel.setText("Enregistrement en cours... Temps : 0 s");
             }
         });
-        contentPane.add(btnStartRecording); // Ajoute le bouton au panneau
+        contentPane.add(btnStartRecording);
 
-        // Ajouter le bouton "Arrêter l'enregistrement"
         JButton btnStopRecording = new JButton("Arrêter l'enregistrement");
         btnStopRecording.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                // Action : Arrêter l'enregistrement
                 stopRecording();
                 lblNewLabel.setText("Enregistrement arrêté. Temps total : " + elapsedSeconds + " s");
             }
         });
-        contentPane.add(btnStopRecording); // Ajoute le bouton au panneau
+        contentPane.add(btnStopRecording);
 
-        // Ajouter le bouton "Sauvegarder"
         JButton btnSaveRecording = new JButton("Sauvegarder");
         btnSaveRecording.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                // Action : Sauvegarder l'enregistrement
                 saveRecording();
             }
         });
-        contentPane.add(btnSaveRecording); // Ajoute le bouton au panneau
+        contentPane.add(btnSaveRecording);
+
+        JButton btnDeleteRecording = new JButton("Supprimer l'enregistrement");
+        btnDeleteRecording.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                deleteRecording();
+            }
+        });
+        contentPane.add(btnDeleteRecording);
     }
 
     /**
      * Méthode pour démarrer l'enregistrement audio.
+     * Configure le fichier avec un nom unique basé sur la date et l'heure actuelles.
+     * Initialise la ligne audio, démarre l'enregistrement et met à jour le temps écoulé.
      */
     private void startRecording() {
         try {
-            // Définir le format audio
+            String timestamp = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss").format(new Date());
+            audioFile = new File("enregistrement_" + timestamp + ".wav");
+
             AudioFormat format = getAudioFormat();
             DataLine.Info info = new DataLine.Info(TargetDataLine.class, format);
 
-            // Ouvrir une ligne pour capturer l'audio
             line = (TargetDataLine) AudioSystem.getLine(info);
             line.open(format);
-            line.start(); // Démarrer la capture audio
+            line.start();
 
-            // Créer un thread pour l'enregistrement
             Thread recordingThread = new Thread(() -> {
                 AudioInputStream ais = new AudioInputStream(line);
                 try {
-                    // Écrire l'audio dans le fichier spécifié
                     AudioSystem.write(ais, fileType, audioFile);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             });
-            recordingThread.start(); // Démarrer l'enregistrement
+            recordingThread.start();
 
-            // Démarrer le timer qui met à jour le compteur de temps chaque seconde
             elapsedSeconds = 0;
             timer = new Timer(1000, new ActionListener() {
                 @Override
@@ -176,7 +174,7 @@ public class InterfaceEnregistrement extends JFrame {
                     lblNewLabel.setText("Enregistrement en cours... Temps : " + elapsedSeconds + " s");
                 }
             });
-            timer.start(); // Démarrer le timer
+            timer.start();
             System.out.println("Enregistrement démarré");
         } catch (LineUnavailableException ex) {
             ex.printStackTrace();
@@ -185,21 +183,23 @@ public class InterfaceEnregistrement extends JFrame {
 
     /**
      * Méthode pour arrêter l'enregistrement audio.
+     * Arrête la capture audio et le compteur de temps.
      */
     private void stopRecording() {
         if (line != null) {
-            line.stop(); // Arrêter la capture audio
-            line.close(); // Fermer la ligne
+            line.stop();
+            line.close();
             System.out.println("Enregistrement arrêté");
 
             if (timer != null) {
-                timer.stop(); // Arrêter le timer
+                timer.stop();
             }
         }
     }
 
     /**
      * Méthode pour sauvegarder l'enregistrement audio.
+     * Affiche le chemin du fichier si la sauvegarde est réussie.
      */
     private void saveRecording() {
         if (audioFile.exists()) {
@@ -210,10 +210,29 @@ public class InterfaceEnregistrement extends JFrame {
     }
 
     /**
-     * Définition du format audio.
+     * Méthode pour supprimer l'enregistrement audio.
+     * Supprime le fichier audio si présent et met à jour l'état de l'interface graphique.
+     */
+    private void deleteRecording() {
+        if (audioFile.exists()) {
+            if (audioFile.delete()) {
+                System.out.println("Enregistrement supprimé avec succès.");
+                lblNewLabel.setText("Aucun enregistrement disponible.");
+            } else {
+                System.out.println("Erreur : impossible de supprimer l'enregistrement.");
+            }
+        } else {
+            System.out.println("Aucun fichier à supprimer.");
+        }
+    }
+
+    /**
+     * Méthode pour définir le format audio.
+     * Spécifie les paramètres tels que la fréquence d'échantillonnage, la taille des échantillons et les canaux audio.
+     * 
+     * @return AudioFormat Le format audio spécifié.
      */
     private AudioFormat getAudioFormat() {
-        // Définir le format audio avec fréquence d'échantillonnage, taille, canaux, etc.
         float sampleRate = 16000;
         int sampleSizeInBits = 16;
         int channels = 1;
