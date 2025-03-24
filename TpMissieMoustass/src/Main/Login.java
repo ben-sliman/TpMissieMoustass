@@ -112,14 +112,14 @@ public class Login extends JFrame {
 					if (validerLogin(login, motDePasseHache)) {
 						JOptionPane.showMessageDialog(null, "Connexion réussie !", "Succès",
 								JOptionPane.INFORMATION_MESSAGE);
-						
-						// Ouvrir la fenêtre adminUtilisateur
-                        AdminUtilisateur adminFrame = new AdminUtilisateur();
-                        adminFrame.setVisible(true);
 
-                        // Fermer la fenêtre de connexion
-                        dispose();
-                        
+						// Ouvrir la fenêtre adminUtilisateur
+						AdminUtilisateur adminFrame = new AdminUtilisateur();
+						adminFrame.setVisible(true);
+
+						// Fermer la fenêtre de connexion
+						dispose();
+
 					} else {
 						JOptionPane.showMessageDialog(null, "Identifiant ou mot de passe incorrect.", "Erreur",
 								JOptionPane.ERROR_MESSAGE);
@@ -137,61 +137,60 @@ public class Login extends JFrame {
 		panneauContenu.add(btnMotDePasseOublie);
 
 		btnMotDePasseOublie.addActionListener(new ActionListener() {
-		    public void actionPerformed(ActionEvent e) {
-		        try {
-		            // Saisie de l'email de l'utilisateur
-		            String email = JOptionPane.showInputDialog(null, "Entrez votre adresse email :",
-		                    "Mot de Passe Oublié", JOptionPane.QUESTION_MESSAGE);
+			public void actionPerformed(ActionEvent e) {
+				try {
+					// Saisie de l'email de l'utilisateur
+					String email = JOptionPane.showInputDialog(null, "Entrez votre adresse email :",
+							"Mot de Passe Oublié", JOptionPane.QUESTION_MESSAGE);
 
-		            if (email == null || email.trim().isEmpty()) {
-		                throw new IllegalArgumentException("Veuillez entrer une adresse email.");
-		            }
+					if (email == null || email.trim().isEmpty()) {
+						throw new IllegalArgumentException("Veuillez entrer une adresse email.");
+					}
 
-		            // Création des champs pour saisir et confirmer le nouveau mot de passe
-		            JPasswordField champNouveauMotDePasse = new JPasswordField();
-		            JPasswordField champConfirmerMotDePasse = new JPasswordField();
+					// Création des champs pour saisir et confirmer le nouveau mot de passe
+					JPasswordField champNouveauMotDePasse = new JPasswordField();
+					JPasswordField champConfirmerMotDePasse = new JPasswordField();
 
-		            JPanel panel = new JPanel();
-		            panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-		            panel.add(new JLabel("Nouveau mot de passe :"));
-		            panel.add(champNouveauMotDePasse);
-		            panel.add(new JLabel("Confirmer le mot de passe :"));
-		            panel.add(champConfirmerMotDePasse);
+					JPanel panel = new JPanel();
+					panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+					panel.add(new JLabel("Nouveau mot de passe :"));
+					panel.add(champNouveauMotDePasse);
+					panel.add(new JLabel("Confirmer le mot de passe :"));
+					panel.add(champConfirmerMotDePasse);
 
-		            int option = JOptionPane.showConfirmDialog(null, panel,
-		                    "Entrez un nouveau mot de passe", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+					int option = JOptionPane.showConfirmDialog(null, panel, "Entrez un nouveau mot de passe",
+							JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 
-		            if (option == JOptionPane.OK_OPTION) {
-		                // Récupération des mots de passe saisis
-		                String nouveauMotDePasse = new String(champNouveauMotDePasse.getPassword()).trim();
-		                String confirmerMotDePasse = new String(champConfirmerMotDePasse.getPassword()).trim();
+					if (option == JOptionPane.OK_OPTION) {
+						// Récupération des mots de passe saisis
+						String nouveauMotDePasse = new String(champNouveauMotDePasse.getPassword()).trim();
+						String confirmerMotDePasse = new String(champConfirmerMotDePasse.getPassword()).trim();
 
-		                // Vérification simple : les mots de passe doivent être identiques
-		                if (!nouveauMotDePasse.equals(confirmerMotDePasse)) {
-		                    throw new IllegalArgumentException("Les mots de passe ne correspondent pas.");
-		                }
+						// Vérification simple : les mots de passe doivent être identiques
+						if (!nouveauMotDePasse.equals(confirmerMotDePasse)) {
+							throw new IllegalArgumentException("Les mots de passe ne correspondent pas.");
+						}
 
-		                // Mettre à jour le mot de passe dans la base de données
-		                String motDePasseHache = hacherMotDePasse(nouveauMotDePasse);
-		                mettreAJourMotDePasse(email, motDePasseHache);
+						// Mettre à jour le mot de passe dans la base de données
+						String motDePasseHache = hacherMotDePasse(nouveauMotDePasse);
+						mettreAJourMotDePasse(email, motDePasseHache);
 
-		                JOptionPane.showMessageDialog(null, "Votre mot de passe a été mis à jour.", 
-		                        "Succès", JOptionPane.INFORMATION_MESSAGE);
-		            } else {
-		                JOptionPane.showMessageDialog(null, "Opération annulée.", "Annulation",
-		                        JOptionPane.INFORMATION_MESSAGE);
-		            }
+						JOptionPane.showMessageDialog(null, "Votre mot de passe a été mis à jour.", "Succès",
+								JOptionPane.INFORMATION_MESSAGE);
+					} else {
+						JOptionPane.showMessageDialog(null, "Opération annulée.", "Annulation",
+								JOptionPane.INFORMATION_MESSAGE);
+					}
 
-		        } catch (IllegalArgumentException ex) {
-		            JOptionPane.showMessageDialog(null, ex.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
-		        } catch (Exception ex) {
-		            JOptionPane.showMessageDialog(null, "Erreur : " + ex.getMessage(), "Erreur",
-		                    JOptionPane.ERROR_MESSAGE);
-		            ex.printStackTrace();
-		        }
-		    }
+				} catch (IllegalArgumentException ex) {
+					JOptionPane.showMessageDialog(null, ex.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
+				} catch (Exception ex) {
+					JOptionPane.showMessageDialog(null, "Erreur : " + ex.getMessage(), "Erreur",
+							JOptionPane.ERROR_MESSAGE);
+					ex.printStackTrace();
+				}
+			}
 		});
-
 
 		// Bouton pour ouvrir la page d'inscription
 		JButton btnInscription = new JButton("S'inscrire");
