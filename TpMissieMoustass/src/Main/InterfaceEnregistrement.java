@@ -23,16 +23,44 @@ import javax.swing.Timer; // Timer pour mettre à jour le temps écoulé
 public class InterfaceEnregistrement extends JFrame {
 
     private static final long serialVersionUID = 1L; // Identifiant pour la sérialisation
+    /**
+     * Le panneau principal qui contient tous les composants de l'interface graphique.
+     */
     private JPanel contentPane; // Le panneau principal qui contient tous les composants
+    /**
+     * Indique l'état de l'enregistrement et affiche le temps écoulé en secondes.
+     * Le texte initial est "Temps d'enregistrement : 0 s".
+     */
     private final JLabel lblNewLabel = new JLabel("Temps d'enregistrement : 0 s"); // Indique l'état de l'enregistrement et le temps écoulé
+    /**
+     * Ligne de données cible pour capturer l'audio à partir d'une source telle qu'un microphone.
+     */
     private TargetDataLine line; // Ligne de données cible pour capturer l'audio
+    /**
+     * Type de fichier pour l'audio, ici spécifié comme WAV (format audio Wave).
+     */    
     private AudioFileFormat.Type fileType = AudioFileFormat.Type.WAVE; // Type de fichier pour l'audio (WAV)
+    /**
+     * Fichier audio où l'enregistrement sera sauvegardé.
+     * Le fichier est initialisé avec le nom "enregistrement.wav".
+     */    
     private File audioFile = new File("enregistrement.wav"); // Fichier où l'audio sera sauvegardé
+    /**
+     * Timer pour mettre à jour le compteur de temps toutes les secondes pendant l'enregistrement.
+     */
     private Timer timer; // Timer pour mettre à jour le compteur de temps
+    /**
+     * Compteur de secondes écoulées depuis le début de l'enregistrement.
+     * Initialisé à 0.
+     */
     private int elapsedSeconds = 0; // Compteur de secondes écoulées
 
     /**
      * Méthode principale pour lancer l'application.
+     *
+     * @param args Les arguments de ligne de commande passés au programme.
+     *             Ils peuvent être utilisés pour personnaliser le comportement
+     *             de l'application au démarrage.
      */
     public static void main(String[] args) {
         // Utiliser EventQueue pour exécuter le programme sur le thread d'interface
