@@ -98,7 +98,7 @@ public class CrudEnregistrement extends JFrame {
 
         contentPane.add(formPanel, BorderLayout.NORTH);
 
-        // Panneau de boutons
+     // Panneau de boutons
         JPanel buttonPanel = new JPanel(new FlowLayout());
         JButton btnAdd = new JButton("Ajouter");
         btnAdd.addActionListener(e -> ajouterEnregistrement());
@@ -117,6 +117,16 @@ public class CrudEnregistrement extends JFrame {
         buttonPanel.add(btnPlay);
 
         contentPane.add(buttonPanel, BorderLayout.SOUTH);
+        
+                // Ajouter le bouton Retour
+                JButton btnRetour = new JButton("Retour");
+                btnRetour.addActionListener(e -> {
+                    // Redirection vers l'interface de connexion
+                    new Login().setVisible(true);
+                    dispose(); // Ferme la fenêtre actuelle
+                });
+                buttonPanel.add(btnRetour);
+
 
         // Charger les enregistrements depuis la base
         chargerEnregistrements();
