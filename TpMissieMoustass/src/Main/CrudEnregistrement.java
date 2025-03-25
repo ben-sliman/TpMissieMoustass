@@ -43,22 +43,6 @@ public class CrudEnregistrement extends JFrame {
     private int selectedId = -1;
 
     /**
-     * Point d'entrée principal de l'application.
-     *
-     * @param args Arguments de la ligne de commande.
-     */
-    public static void main(String[] args) {
-        EventQueue.invokeLater(() -> {
-            try {
-                CrudEnregistrement frame = new CrudEnregistrement();
-                frame.setVisible(true);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
-    }
-
-    /**
      * Constructeur : configure l'interface utilisateur.
      */
     public CrudEnregistrement() {
