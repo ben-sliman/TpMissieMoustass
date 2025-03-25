@@ -13,233 +13,234 @@ import java.awt.FlowLayout;
 import java.awt.Color;
 import javax.sound.sampled.*;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
-import javax.swing.Timer;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import javax.swing.Timer;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 /**
- * Classe principale pour créer une interface graphique permettant
- * d'enregistrer, arrêter, sauvegarder et supprimer des fichiers audio.
+ * Classe principale pour gérer l'enregistrement audio, le chiffrement, et le stockage dans une base de données.
  */
 public class InterfaceEnregistrement extends JFrame {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	/**
-	 * Le panneau principal qui contient tous les composants de l'interface
-	 * graphique.
-	 */
-	private JPanel contentPane;
+    /**
+     * Le panneau principal de l'interface utilisateur.
+     */
+    private JPanel contentPane;
 
-	/**
-	 * Label pour afficher le temps écoulé pendant l'enregistrement audio. Indique
-	 * l'état actuel et le temps écoulé au format texte.
-	 */
-	private final JLabel lblNewLabel = new JLabel("Temps d'enregistrement : 0 s");
+    /**
+     * Label affichant le temps écoulé pendant l'enregistrement.
+     */
+    private final JLabel lblNewLabel = new JLabel("Temps d'enregistrement : 0 s");
 
-	/**
-	 * Ligne de données cible utilisée pour capturer l'audio à partir d'une source
-	 * externe. Cette ligne permet de collecter et de traiter le signal audio
-	 * enregistré.
-	 */
-	private TargetDataLine line;
+    /**
+     * Ligne audio utilisée pour capturer le son du micro.
+     */
+    private TargetDataLine line;
 
-	/**
-	 * Type de fichier audio dans lequel l'enregistrement sera sauvegardé. Le format
-	 * utilisé est WAV, adapté à la plupart des utilisations audio.
-	 */
-	private AudioFileFormat.Type fileType = AudioFileFormat.Type.WAVE;
+    /**
+     * Le format du fichier audio (WAV).
+     */
+    private AudioFileFormat.Type fileType = AudioFileFormat.Type.WAVE;
 
-	/**
-	 * Fichier audio où sera sauvegardé l'enregistrement. Le nom du fichier inclut
-	 * la date et l'heure actuelles pour éviter les doublons.
-	 */
-	private File audioFile;
+    /**
+     * Le fichier audio où l'enregistrement est sauvegardé.
+     */
+    private File audioFile;
 
-	/**
-	 * Timer utilisé pour suivre le temps écoulé pendant l'enregistrement. Met à
-	 * jour l'affichage chaque seconde.
-	 */
-	private Timer timer;
+    /**
+     * Timer utilisé pour suivre la durée de l'enregistrement.
+     */
+    private Timer timer;
 
-	/**
-	 * Compteur représentant le temps écoulé en secondes depuis le début de
-	 * l'enregistrement. Initialisé à 0 au démarrage.
-	 */
-	private int elapsedSeconds = 0;
+    /**
+     * Nombre de secondes écoulées depuis le début de l'enregistrement.
+     */
+    private int elapsedSeconds = 0;
 
-	/**
-	 * Méthode principale pour lancer l'application.
-	 * 
-	 * @param args Arguments de la ligne de commande.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					InterfaceEnregistrement frame = new InterfaceEnregistrement();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+    /**
+     * Point d'entrée principal de l'application.
+     * 
+     * @param args Arguments de la ligne de commande (non utilisés).
+     */
+    public static void main(String[] args) {
+        EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                try {
+                    InterfaceEnregistrement frame = new InterfaceEnregistrement();
+                    frame.setVisible(true);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
 
-	/**
-	 * Constructeur de la classe InterfaceEnregistrement. Configure l'interface
-	 * graphique et initialise les composants nécessaires.
-	 */
-	public InterfaceEnregistrement() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
+    /**
+     * Constructeur de la classe InterfaceEnregistrement.
+     * Configure l'interface utilisateur et les composants.
+     */
+    public InterfaceEnregistrement() {
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setBounds(100, 100, 450, 300);
 
-		contentPane = new JPanel();
-		contentPane.setBackground(new Color(199, 254, 204));
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		setContentPane(contentPane);
-		contentPane.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+        contentPane = new JPanel();
+        contentPane.setBackground(new Color(199, 254, 204));
+        contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+        setContentPane(contentPane);
+        contentPane.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 
-		JProgressBar progressBar = new JProgressBar();
-		contentPane.add(progressBar);
+        JProgressBar progressBar = new JProgressBar();
+        contentPane.add(progressBar);
 
-		contentPane.add(lblNewLabel);
+        contentPane.add(lblNewLabel);
 
-		JButton btnStartRecording = new JButton("Démarrer l'enregistrement");
-		btnStartRecording.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				startRecording();
-				lblNewLabel.setText("Enregistrement en cours... Temps : 0 s");
-			}
-		});
-		contentPane.add(btnStartRecording);
+        JButton btnStartRecording = new JButton("Démarrer l'enregistrement");
+        btnStartRecording.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                startRecording();
+                lblNewLabel.setText("Enregistrement en cours... Temps : 0 s");
+            }
+        });
+        contentPane.add(btnStartRecording);
 
-		JButton btnStopRecording = new JButton("Arrêter l'enregistrement");
-		btnStopRecording.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				stopRecording();
-				lblNewLabel.setText("Enregistrement arrêté. Temps total : " + elapsedSeconds + " s");
-			}
-		});
-		contentPane.add(btnStopRecording);
+        JButton btnStopRecording = new JButton("Arrêter l'enregistrement");
+        btnStopRecording.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    stopRecordingAndSave();
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+                lblNewLabel.setText("Enregistrement arrêté et sauvegardé. Temps total : " + elapsedSeconds + " s");
+            }
+        });
+        contentPane.add(btnStopRecording);
+    }
 
-		JButton btnSaveRecording = new JButton("Sauvegarder");
-		btnSaveRecording.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				saveRecording();
-			}
-		});
-		contentPane.add(btnSaveRecording);
+    /**
+     * Démarre l'enregistrement audio et sauvegarde le fichier temporaire.
+     */
+    private void startRecording() {
+        try {
+            String timestamp = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss").format(new Date());
+            audioFile = new File("enregistrement_" + timestamp + ".wav");
 
-		JButton btnDeleteRecording = new JButton("Supprimer l'enregistrement");
-		btnDeleteRecording.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				deleteRecording();
-			}
-		});
-		contentPane.add(btnDeleteRecording);
-	}
+            AudioFormat format = getAudioFormat();
+            DataLine.Info info = new DataLine.Info(TargetDataLine.class, format);
 
-	/**
-	 * Méthode pour démarrer l'enregistrement audio. Configure le fichier avec un
-	 * nom unique basé sur la date et l'heure actuelles. Initialise la ligne audio,
-	 * démarre l'enregistrement et met à jour le temps écoulé.
-	 */
-	private void startRecording() {
-		try {
-			String timestamp = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss").format(new Date());
-			audioFile = new File("enregistrement_" + timestamp + ".wav");
+            line = (TargetDataLine) AudioSystem.getLine(info);
+            line.open(format);
+            line.start();
 
-			AudioFormat format = getAudioFormat();
-			DataLine.Info info = new DataLine.Info(TargetDataLine.class, format);
+            Thread recordingThread = new Thread(() -> {
+                AudioInputStream ais = new AudioInputStream(line);
+                try {
+                    AudioSystem.write(ais, fileType, audioFile);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
+            recordingThread.start();
 
-			line = (TargetDataLine) AudioSystem.getLine(info);
-			line.open(format);
-			line.start();
+            elapsedSeconds = 0;
+            timer = new Timer(1000, new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    elapsedSeconds++;
+                    lblNewLabel.setText("Enregistrement en cours... Temps : " + elapsedSeconds + " s");
+                }
+            });
+            timer.start();
+            System.out.println("Enregistrement démarré");
+        } catch (LineUnavailableException ex) {
+            ex.printStackTrace();
+        }
+    }
 
-			Thread recordingThread = new Thread(() -> {
-				AudioInputStream ais = new AudioInputStream(line);
-				try {
-					AudioSystem.write(ais, fileType, audioFile);
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			});
-			recordingThread.start();
+    /**
+     * Arrête l'enregistrement audio, chiffre les données, calcule un hash
+     * et sauvegarde les informations dans la base de données.
+     * 
+     * @throws IOException Si une erreur se produit lors de la lecture du fichier audio.
+     */
+    private void stopRecordingAndSave() throws IOException {
+        // Arrêter l'enregistrement
+        if (line != null) {
+            line.stop();
+            line.close();
+            System.out.println("Enregistrement arrêté");
 
-			elapsedSeconds = 0;
-			timer = new Timer(1000, new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					elapsedSeconds++;
-					lblNewLabel.setText("Enregistrement en cours... Temps : " + elapsedSeconds + " s");
-				}
-			});
-			timer.start();
-			System.out.println("Enregistrement démarré");
-		} catch (LineUnavailableException ex) {
-			ex.printStackTrace();
-		}
-	}
+            if (timer != null) {
+                timer.stop();
+            }
+        }
 
-	/**
-	 * Méthode pour arrêter l'enregistrement audio. Arrête la capture audio et le
-	 * compteur de temps.
-	 */
-	private void stopRecording() {
-		if (line != null) {
-			line.stop();
-			line.close();
-			System.out.println("Enregistrement arrêté");
+        // Sauvegarder dans la base de données
+        if (audioFile.exists()) {
+            try (FileInputStream fis = new FileInputStream(audioFile)) {
+                byte[] audioData = fis.readAllBytes();
 
-			if (timer != null) {
-				timer.stop();
-			}
-		}
-	}
+                // Chiffrement et hashage
+                EncryptionAES256 encryption = new EncryptionAES256(audioData);
+                byte[] encryptedAudio = encryption.encrypt(audioData);
 
-	/**
-	 * Méthode pour sauvegarder l'enregistrement audio. Affiche le chemin du fichier
-	 * si la sauvegarde est réussie.
-	 */
-	private void saveRecording() {
-		if (audioFile.exists()) {
-			System.out.println("Enregistrement sauvegardé : " + audioFile.getAbsolutePath());
-		} else {
-			System.out.println("Erreur : aucun fichier trouvé.");
-		}
-	}
+                HashingSHA256 hashing = new HashingSHA256();
+                String audioHash = hashing.calculateHash(encryptedAudio);
 
-	/**
-	 * Méthode pour supprimer l'enregistrement audio. Supprime le fichier audio si
-	 * présent et met à jour l'état de l'interface graphique.
-	 */
-	private void deleteRecording() {
-		if (audioFile.exists()) {
-			if (audioFile.delete()) {
-				System.out.println("Enregistrement supprimé avec succès.");
-				lblNewLabel.setText("Aucun enregistrement disponible.");
-			} else {
-				System.out.println("Erreur : impossible de supprimer l'enregistrement.");
-			}
-		} else {
-			System.out.println("Aucun fichier à supprimer.");
-		}
-	}
+                // Sauvegarde dans la base de données
+                saveToDatabase(audioFile.getName(), elapsedSeconds, encryptedAudio, audioHash, 1); // Remplacez 1 par l'ID utilisateur approprié
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            System.out.println("Erreur : aucun fichier trouvé.");
+        }
+    }
 
-	/**
-	 * Méthode pour définir le format audio. Spécifie les paramètres tels que la
-	 * fréquence d'échantillonnage, la taille des échantillons et les canaux audio.
-	 * 
-	 * @return AudioFormat Le format audio spécifié.
-	 */
-	private AudioFormat getAudioFormat() {
-		float sampleRate = 16000;
-		int sampleSizeInBits = 16;
-		int channels = 1;
-		boolean signed = true;
-		boolean bigEndian = false;
-		return new AudioFormat(sampleRate, sampleSizeInBits, channels, signed, bigEndian);
-	}
+    /**
+     * Insère les métadonnées et le fichier audio chiffré dans la base de données.
+     * 
+     * @param nomFichier    Le nom du fichier audio.
+     * @param duree         La durée de l'enregistrement en secondes.
+     * @param chiffre_AES256 Les données audio chiffrées.
+     * @param hashage_SHA256 Le hash SHA-256 des données audio.
+     * @param idUser        L'identifiant de l'utilisateur associé.
+     */
+    private void saveToDatabase(String nomFichier, double duree, byte[] chiffre_AES256, String hashage_SHA256, int idUser) {
+        try (Connection conn = DataBaseConnexion.connect();
+             PreparedStatement stmt = conn.prepareStatement(
+                 "INSERT INTO enregistrement (nom_fichier, duree, chiffre_AES256, hashage_SHA256, id_user) VALUES (?, ?, ?, ?, ?)")) {
+            stmt.setString(1, nomFichier);
+            stmt.setDouble(2, duree);
+            stmt.setBytes(3, chiffre_AES256);
+            stmt.setString(4, hashage_SHA256);
+            stmt.setInt(5, idUser);
+
+            stmt.executeUpdate();
+            System.out.println("Enregistrement sauvegardé dans la base de données.");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Retourne le format audio utilisé pour les enregistrements.
+     * 
+     * @return AudioFormat Le format audio spécifié.
+     */
+    private AudioFormat getAudioFormat() {
+        float sampleRate = 16000;
+        int sampleSizeInBits = 16;
+        int channels = 1;
+        boolean signed = true;
+        boolean bigEndian = false;
+        return new AudioFormat(sampleRate, sampleSizeInBits, channels, signed, bigEndian);
+    }
 }
