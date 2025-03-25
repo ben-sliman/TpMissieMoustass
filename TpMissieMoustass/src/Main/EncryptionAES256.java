@@ -4,31 +4,36 @@ import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
+import java.security.SecureRandom;
+import java.util.Arrays;
 
 public class EncryptionAES256 {
-
     private SecretKey key;
 
     /**
-     * Constructeur avec clé existante.
-     * Si une clé est fournie, elle est utilisée. Sinon, une nouvelle clé est générée.
-     * 
+     * Constructeur avec clé existante ou génération d'une nouvelle clé.
      * @param existingKey La clé AES-256 existante (ou null pour en générer une nouvelle).
      * @throws Exception En cas d'erreur dans la génération ou l'utilisation de la clé.
      */
     public EncryptionAES256(byte[] existingKey) throws Exception {
         if (existingKey != null) {
-            // Utiliser une clé existante
-            this.key = new SecretKeySpec(existingKey, "AES");
+            this.key = new SecretKeySpec(normalizeKey(existingKey), "AES");
         } else {
-            // Générer une nouvelle clé
             this.key = generateAESKey();
         }
     }
 
     /**
-     * Méthode pour chiffrer les données.
-     * 
+     * Normalise une clé AES en 32 octets (256 bits).
+     * @param keyBytes La clé brute à normaliser.
+     * @return Une clé de 32 octets.
+     */
+    private byte[] normalizeKey(byte[] keyBytes) {
+        return Arrays.copyOf(keyBytes, 32);
+    }
+
+    /**
+     * Chiffre les données avec AES-256.
      * @param data Les données brutes à chiffrer.
      * @return Les données chiffrées.
      * @throws Exception En cas d'erreur de chiffrement.
@@ -40,9 +45,8 @@ public class EncryptionAES256 {
     }
 
     /**
-     * Méthode pour déchiffrer les données.
-     * 
-     * @param encryptedData Les données chiffrées à déchiffrer.
+     * Déchiffre les données chiffrées.
+     * @param encryptedData Les données chiffrées.
      * @return Les données déchiffrées.
      * @throws Exception En cas d'erreur de déchiffrement.
      */
@@ -53,32 +57,21 @@ public class EncryptionAES256 {
     }
 
     /**
-     * Méthode pour générer une nouvelle clé AES-256.
-     * 
+     * Génère une clé AES-256 sécurisée.
      * @return La clé AES-256 générée.
      * @throws Exception En cas d'erreur lors de la génération de la clé.
      */
     private SecretKey generateAESKey() throws Exception {
         KeyGenerator keyGen = KeyGenerator.getInstance("AES");
-        keyGen.init(256); // Taille de la clé
+        keyGen.init(256, new SecureRandom());
         return keyGen.generateKey();
     }
 
     /**
-     * Méthode pour obtenir la clé AES-256 en tant que tableau de bytes.
-     * 
-     * @return La clé AES-256 sous forme de tableau de bytes.
+     * Retourne la clé AES sous forme de tableau de bytes.
+     * @return La clé AES-256 en tableau de bytes.
      */
     public byte[] getKeyBytes() {
         return this.key.getEncoded();
-    }
-
-    /**
-     * Méthode pour obtenir la clé AES-256 utilisée.
-     * 
-     * @return L'objet SecretKey AES-256.
-     */
-    public SecretKey getKey() {
-        return this.key;
     }
 }
