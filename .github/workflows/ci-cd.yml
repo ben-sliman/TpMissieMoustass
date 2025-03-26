@@ -54,4 +54,3 @@ jobs:
         echo "Deploying application..."
         # Add deployment script or command here
         echo "Deployment successful."
- 
