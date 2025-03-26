@@ -27,7 +27,7 @@ jobs:
     - name: Compile Java project
       run: |
         mkdir -p MissieMoustass/bin
-        javac -d MissieMoustass/bin $(find MissieMoustass/src -name "*.java")
+        javac -d MissieMoustass/bin $(find MissieMoustass/src/Main -name "*.java")
 
     - name: Configure SonarQube Environment
       run: |
