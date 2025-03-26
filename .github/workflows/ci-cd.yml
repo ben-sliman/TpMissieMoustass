@@ -25,7 +25,7 @@ jobs:
     - name: Compile Java project
       run: |
         mkdir -p bin
-        javac -d bin $(find MissieMoustass/src/Main -name "*.java")
+        javac -d bin $(find TpMissieMoustass/src/Main -name "*.java")
 
   deploy:
     runs-on: macos-latest
