@@ -1,4 +1,4 @@
-name: Java CI/CD on macOS
+name: Java CI/CD for Main Package
 
 on:
   push:
@@ -22,15 +22,15 @@ jobs:
         distribution: 'temurin'
         java-version: '23'
 
-    - name: Compile Java project
+    - name: Compile Main Package
       run: |
         mkdir -p bin
-        javac -d bin $(find MissieMoustass -name "*.java")
+        javac -d bin $(find src/Main -name "*.java")
 
-    - name: Run tests (JUnit)
+    - name: Run tests (JUnit - Optional)
       run: |
-        if find MissieMoustass -name "*Test.java" | grep -q .; then
-          java -cp bin org.junit.runner.JUnitCore $(find MissieMoustass -name "*Test.java" | sed 's/MissieMoustass\///;s/\.java//' | tr '/' '.')
+        if find src/Main -name "*Test.java" | grep -q .; then
+          java -cp bin org.junit.runner.JUnitCore $(find src/Main -name "*Test.java" | sed 's/src\/Main\///;s/\.java//' | tr '/' '.')
         else
           echo "No tests found, skipping."
 
@@ -50,6 +50,6 @@ jobs:
 
     - name: Deploy Application
       run: |
-        echo "Déploiement de l'application..."
-        # Ajoutez vos commandes spécifiques ici
-        echo "Déploiement terminé avec succès."
+        echo "Deploying application..."
+        # Add deployment script or command here
+        echo "Deployment successful."
