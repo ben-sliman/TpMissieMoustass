@@ -1,4 +1,4 @@
-name: Java CI/CD for Main Package
+name: Java CI/CD for Main Package (MAC BEN)
 
 on:
   push:
