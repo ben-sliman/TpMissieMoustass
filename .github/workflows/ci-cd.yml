@@ -22,7 +22,7 @@ jobs:
         distribution: 'temurin'
         java-version: '23'
 
-    - name: Compile Main Package
+    - name: Compile Java project
       run: |
         mkdir -p bin
         javac -d bin $(find src/Main -name "*.java")
@@ -30,9 +30,11 @@ jobs:
     - name: Run tests (JUnit - Optional)
       run: |
         if find src/Main -name "*Test.java" | grep -q .; then
+          echo "Running JUnit tests..."
           java -cp bin org.junit.runner.JUnitCore $(find src/Main -name "*Test.java" | sed 's/src\/Main\///;s/\.java//' | tr '/' '.')
         else
           echo "No tests found, skipping."
+        fi
 
   deploy:
     runs-on: macos-latest
@@ -51,5 +53,5 @@ jobs:
     - name: Deploy Application
       run: |
         echo "Deploying application..."
-        # Add deployment script or command here
+        # Add deployment script or commands here
         echo "Deployment successful."
