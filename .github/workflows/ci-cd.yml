@@ -25,12 +25,12 @@ jobs:
     - name: Compile Java project
       run: |
         mkdir -p bin
-        javac -d bin $(find src -name "*.java")
+        javac -d bin $(find MissieMoustass -name "*.java")
 
-    - name: Run tests (if JUnit is used)
+    - name: Run tests (JUnit)
       run: |
-        if ls src | grep -q "Test"; then
-          java -cp bin org.junit.runner.JUnitCore $(find src -name "*Test.java" | sed 's/src\///;s/\.java//' | tr '/' '.')
+        if find MissieMoustass -name "*Test.java" | grep -q .; then
+          java -cp bin org.junit.runner.JUnitCore $(find MissieMoustass -name "*Test.java" | sed 's/MissieMoustass\///;s/\.java//' | tr '/' '.')
         else
           echo "No tests found, skipping."
 
@@ -50,6 +50,6 @@ jobs:
 
     - name: Deploy Application
       run: |
-        echo "Deploying application..."
-        # Add deployment script or command here
-        echo "Deployment successful."
+        echo "Déploiement de l'application..."
+        # Ajoutez vos commandes spécifiques ici
+        echo "Déploiement terminé avec succès."
