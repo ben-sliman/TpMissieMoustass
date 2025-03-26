@@ -7,11 +7,27 @@ import javax.swing.table.DefaultTableModel;
 import java.io.*;
 import java.sql.*;
 
+/**
+ * Classe représentant l'interface graphique pour l'enregistrement des données.
+ * Cette classe étend JFrame pour fournir une interface utilisateur pour effectuer des opérations CRUD.
+ */
 public class CrudEnregistrement extends JFrame {
 
     private static final long serialVersionUID = 1L;
+    /**
+     * Le panneau principal de la fenêtre, contenant tous les composants graphiques.
+     * Ce panneau est utilisé pour organiser les éléments de l'interface utilisateur.
+     */
     private JPanel contentPane;
+    /**
+     * Le tableau affichant des données dans l'interface graphique.
+     * Ce tableau est utilisé pour afficher les informations sous forme de lignes et de colonnes.
+     */
     private JTable table;
+    /**
+     * Le modèle de données utilisé pour gérer le contenu du tableau.
+     * Ce modèle contient les données qui seront affichées dans un tableau JTable.
+     */
     private DefaultTableModel tableModel;
 
     /**

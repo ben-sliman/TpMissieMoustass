@@ -17,10 +17,26 @@ import java.util.regex.Pattern;
 public class Inscription extends JFrame {
 
 	private static final long serialVersionUID = 1L;
+	/**
+	 * Champ de texte permettant à l'utilisateur de saisir son adresse e-mail ou son identifiant.
+	 * Ce champ est utilisé pour le login de l'utilisateur dans l'application.
+	 */
 	private JTextField champTexteLogin; // Champ de texte pour l'adresse email
+	/**
+	 * Champ de texte pour saisir le mot de passe de l'utilisateur.
+	 * Ce champ permet à l'utilisateur de saisir son mot de passe de manière sécurisée.
+	 */
 	private JPasswordField champMotDePasse; // Champ pour le mot de passe
+	/**
+	 * Champ de texte pour confirmer le mot de passe.
+	 * Ce champ permet à l'utilisateur de saisir à nouveau son mot de passe pour vérifier qu'il l'a saisi correctement.
+	 */
 	private JPasswordField champConfirmationMotDePasse; // Champ pour confirmer le mot de passe
 
+	/**
+	 * Constructeur par défaut de la classe Inscription.
+	 * Initialise les composants ou les variables nécessaires pour le processus d'inscription.
+	 */
 	public Inscription() {
 		setTitle("Inscription");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -116,7 +132,11 @@ public class Inscription extends JFrame {
 	}
 
 	/**
-	 * Hache un mot de passe avec l'algorithme SHA-256.
+	 * Hache le mot de passe en utilisant un algorithme de hachage sécurisé.
+	 * 
+	 * @param motDePasse Le mot de passe de l'utilisateur à hacher.
+	 * @return Le mot de passe haché sous forme de chaîne de caractères.
+	 * @throws NoSuchAlgorithmException Si l'algorithme de hachage spécifié n'est pas disponible.
 	 */
 	public String hacherMotDePasse(String motDePasse) throws NoSuchAlgorithmException {
 		MessageDigest digest = MessageDigest.getInstance("SHA-256");
@@ -160,7 +180,10 @@ public class Inscription extends JFrame {
 	}
 
 	/**
-	 * Valide le format d'une adresse email avec une regex.
+	 * Valide l'adresse e-mail fournie en vérifiant si elle est conforme au format attendu.
+	 * 
+	 * @param email L'adresse e-mail à valider.
+	 * @return true si l'adresse e-mail est valide, false sinon.
 	 */
 	public boolean validerEmail(String email) {
 		String regex = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$";
@@ -170,7 +193,10 @@ public class Inscription extends JFrame {
 	}
 
 	/**
-	 * Valide la complexité du mot de passe.
+	 * Valide le mot de passe fourni en vérifiant s'il répond aux critères de sécurité définis.
+	 * 
+	 * @param motDePasse Le mot de passe à valider.
+	 * @return true si le mot de passe est valide, false sinon.
 	 */
 	public boolean validerMotDePasse(String motDePasse) {
 		String regex = "^(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*()_+\\-\\[\\]{};':\"\\\\|,.<>/?]).{12,}$";

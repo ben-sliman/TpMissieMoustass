@@ -16,11 +16,32 @@ import java.util.regex.Pattern;
  */
 public class AdminUtilisateur extends JFrame {
 
+    /**
+     * Le panneau principal de la fenêtre, contenant tous les composants graphiques.
+     * Ce panneau est utilisé pour organiser les éléments de l'interface utilisateur.
+     */
 	private JPanel contentPane;
+    /**
+     * Le champ de texte permettant à l'utilisateur de saisir son adresse e-mail.
+     */
 	private JTextField emailField;
+    /**
+     * Le champ de texte permettant à l'utilisateur de saisir son mot de passe de manière sécurisée.
+     */
 	private JPasswordField passwordField;
+    /**
+     * Le champ de texte permettant à l'utilisateur de saisir son identifiant.
+     */
 	private JTextField idField;
+    /**
+     * Le tableau affichant les informations des utilisateurs.
+     * Il utilise le modèle de données (tableModel) pour afficher les informations dans l'interface graphique.
+     */
 	private JTable userTable;
+    /**
+     * Le modèle de données utilisé pour gérer le contenu du tableau.
+     * Ce modèle contient les données qui seront affichées dans un tableau JTable.
+     */
 	private DefaultTableModel tableModel;
 
 	/**

@@ -5,7 +5,8 @@ import org.junit.jupiter.api.Test;
 import Main.EncryptionAES256; // Import de la classe EncryptionAES256 depuis le package Main
 
 /**
- * Classe de test pour vérifier les fonctionnalités de EncryptionAES256.
+ * Constructeur par défaut de la classe TestEncryptionAES256.
+ * Initialise les variables nécessaires ou effectue une initialisation par défaut.
  */
 public class TestEncryptionAES256 {
 

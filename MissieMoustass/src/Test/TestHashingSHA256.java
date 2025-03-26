@@ -6,6 +6,7 @@ import Main.HashingSHA256; // Import de la classe HashingSHA256 depuis le packag
 
 /**
  * Classe de test pour la méthode calculateHash dans HashingSHA256.
+ * Ce constructeur par défaut est utilisé par la JVM pour instancier la classe.
  */
 public class TestHashingSHA256 {
 
