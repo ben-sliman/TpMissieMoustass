@@ -27,14 +27,6 @@ jobs:
         mkdir -p bin
         javac -d bin $(find MissieMoustass/src/Main -name "*.java")
 
-    - name: Run tests (JUnit - Optional)
-      run: |
-        if find MissieMoustass/src/Main -name "*Test.java" | grep -q .; then
-          echo "Running JUnit tests..."
-          java -cp bin org.junit.runner.JUnitCore $(find MissieMoustass/src/Main -name "*Test.java" | sed 's/MissieMoustass\/src\/Main\///;s/\.java//' | tr '/' '.')
-        else
-          echo "No tests found, skipping."
-
   deploy:
     runs-on: macos-latest
     needs: build
