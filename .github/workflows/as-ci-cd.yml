@@ -45,5 +45,5 @@ jobs:
       - name: Deploy Application
         run: |
           echo Deploying application...
-          REM Add deployment script or commands here
+          # Add deployment script or commands here
           echo Deployment successful.
