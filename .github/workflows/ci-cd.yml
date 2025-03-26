@@ -25,7 +25,7 @@ jobs:
     - name: Compile Java project
       run: |
         mkdir -p bin
-        javac -d bin $(find src -name "*.java")
+        javac -d bin $(findfind /Users/iziben/Documents/École/Qualité\ de\ Code\ Source/TpMissieMoustass/MissieMoustass -name "*.java")
 
     - name: Run tests (if JUnit is used)
       run: |
