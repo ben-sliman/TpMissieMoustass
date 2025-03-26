@@ -22,13 +22,13 @@ jobs:
       uses: actions/setup-java@v3
       with:
         distribution: 'temurin'
-        java-version: '23'  # Utilisation de Java 23
+        java-version: '23'  # Java 23 spécifié
 
     - name: Configure SonarQube Environment
       run: |
         echo "SONAR_SCANNER_OPTS=-X" >> $GITHUB_ENV
-        echo "SONAR_PROJECT_KEY=ben-sliman_TpMissieMoustass" >> $GITHUB_ENV
         echo "SONAR_HOST_URL=https://sonarcloud.io" >> $GITHUB_ENV
+        echo "SONAR_PROJECT_KEY=ben-sliman_TpMissieMoustass" >> $GITHUB_ENV
         echo "SONAR_ORGANIZATION=ben-sliman" >> $GITHUB_ENV
 
     - name: SonarQube Scan
