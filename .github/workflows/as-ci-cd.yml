@@ -25,8 +25,8 @@ jobs:
       - name: Compile Java project
         run: |
           mkdir bin
-          Get-ChildItem MissieMoustass/src/Main -Recurse -Filter "*.java" | ForEach-Object { $_.FullName } > sources.txt
-          javac -d bin @sources.txt
+          $sourceFiles = Get-ChildItem MissieMoustass/src/Main -Recurse -Filter "*.java" | ForEach-Object { $_.FullName }
+          javac -d bin $sourceFiles
 
   deploy:
     runs-on: windows-latest
