@@ -27,7 +27,7 @@ jobs:
     - name: Compile Java Project
       run: |
         mkdir -p MissieMoustass/bin
-        javac -d MissieMoustass/bin $(find MissieMoustass/src -name "*.java")
+        javac -d MissieMoustass/bin $(find MissieMoustass/src/Main -name "*.java")
 
     - name: SonarQube Scan
       uses: SonarSource/sonarqube-scan-action@v5
