@@ -14,14 +14,14 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v4
+      uses: actions/checkout@v3
       with:
-        fetch-depth: 0  # Permet une analyse complète, y compris les historiques Git
+        fetch-depth: 0  # Analyse complète du code source
 
     - name: Set up JDK 23
       uses: actions/setup-java@v3
       with:
-        java-version: '23'
+        java-version: '23'  # JDK 23 utilisé pour correspondre à votre configuration
         distribution: 'temurin'
 
     - name: Compile Java Project
@@ -29,8 +29,10 @@ jobs:
         mkdir -p TpMissieMoustass/bin
         javac -d TpMissieMoustass/bin $(find TpMissieMoustass/src/Main -name "*.java")
 
-    - name: SonarQube Scan
-      uses: SonarSource/sonarqube-scan-action@v5
+    - name: SonarCloud Scan
+      uses: SonarSource/sonarcloud-github-action@master
       env:
-        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Nécessaire pour les informations sur les PR
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}   # Token généré sur SonarCloud.io
         SONAR_HOST_URL: https://sonarcloud.io
+        SONAR_SCANNER_OPTS: "-X"  # Active le mode debug
