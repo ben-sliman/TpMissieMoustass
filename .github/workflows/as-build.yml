@@ -1,0 +1,32 @@
+name: SonarCloud Scan
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  sonarcloud:
+    name: Analyze on SonarCloud
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up SonarCloud
+      uses: sonarsource/sonarcloud-github-action@v1
+      with:
+        organization: ${{ secrets.SONAR_ORG }}
+        token: ${{ secrets.SONAR_TOKEN }}
+
+    - name: Run SonarCloud analysis
+      run: |
+        # Configuration for sonar-scanner if not using the GitHub Action above
+        sonar-scanner \
+          -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }} \
+          -Dsonar.organization=${{ secrets.SONAR_ORG }} \
+          -Dsonar.host.url=https://sonarcloud.io
