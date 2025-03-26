@@ -25,16 +25,15 @@ jobs:
     - name: Compile Java project
       run: |
         mkdir -p bin
-        javac -d bin $(find src/Main -name "*.java")
+        javac -d bin $(find MissieMoustass/src/Main -name "*.java")
 
     - name: Run tests (JUnit - Optional)
       run: |
-        if find src/Main -name "*Test.java" | grep -q .; then
+        if find MissieMoustass/src/Main -name "*Test.java" | grep -q .; then
           echo "Running JUnit tests..."
-          java -cp bin org.junit.runner.JUnitCore $(find src/Main -name "*Test.java" | sed 's/src\/Main\///;s/\.java//' | tr '/' '.')
+          java -cp bin org.junit.runner.JUnitCore $(find MissieMoustass/src/Main -name "*Test.java" | sed 's/MissieMoustass\/src\/Main\///;s/\.java//' | tr '/' '.')
         else
           echo "No tests found, skipping."
-        fi
 
   deploy:
     runs-on: macos-latest
