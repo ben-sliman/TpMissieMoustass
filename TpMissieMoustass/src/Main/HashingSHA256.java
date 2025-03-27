@@ -1,7 +1,7 @@
 package Main;
 
 import java.security.MessageDigest;
-
+ 
 public class HashingSHA256 {
 
     /**
