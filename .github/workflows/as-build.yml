@@ -1,6 +1,6 @@
 name: SonarCloud Scan
 
-on:
+on: 
   push:
     branches:
       - main
