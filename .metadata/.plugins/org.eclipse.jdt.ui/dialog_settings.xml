@@ -54,13 +54,13 @@
 		<item key="nonavbar" value="false"/>
 		<item key="openinbrowser" value="false"/>
 		<item key="source" value="23"/>
-		<item key="antpath" value="C:\Users\askai\Desktop\TpMissieMoustass\MissieMoustass\javadoc.xml"/>
-		<item key="destdir" value="C:\Users\askai\Desktop\TpMissieMoustass\MissieMoustass\doc"/>
+		<item key="antpath" value="C:\Users\askai\Desktop\TpMissieMoustass\TpMissieMoustass\javadoc.xml"/>
+		<item key="destdir" value="C:\Users\askai\Desktop\TpMissieMoustass\TpMissieMoustass\doc"/>
 		<section name="projects">
-			<section name="MissieMoustass">
+			<section name="TpMissieMoustass">
 				<item key="href" value=""/>
-				<item key="destdir" value="C:\Users\askai\Desktop\TpMissieMoustass\MissieMoustass\doc"/>
-				<item key="antpath" value="C:\Users\askai\Desktop\TpMissieMoustass\MissieMoustass\javadoc.xml"/>
+				<item key="destdir" value="C:\Users\askai\Desktop\TpMissieMoustass\TpMissieMoustass\doc"/>
+				<item key="antpath" value="C:\Users\askai\Desktop\TpMissieMoustass\TpMissieMoustass\javadoc.xml"/>
 			</section>
 		</section>
 	</section>

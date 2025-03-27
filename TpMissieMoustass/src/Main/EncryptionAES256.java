@@ -7,6 +7,15 @@ import javax.crypto.spec.SecretKeySpec;
 import java.security.SecureRandom;
 import java.util.Arrays;
 
+/**
+ * La classe <code>EncryptionAES256</code> fournit des méthodes pour effectuer le chiffrement
+ * et le déchiffrement de données en utilisant l'algorithme AES-256 (Advanced Encryption Standard).
+ * Cette classe est utilisée pour sécuriser les données sensibles en les chiffrant avec une clé de 256 bits.
+ * 
+ * 
+ * @author Aslan
+ * @version 1.0
+ */
 public class EncryptionAES256 {
     private SecretKey key;
 
