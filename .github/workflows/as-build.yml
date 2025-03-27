@@ -36,7 +36,7 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
-          ./gradlew build
+          ./gradlew build --warning-mode all
           ./gradlew sonarqube --no-configuration-cache \
             -Dsonar.projectKey=ben-sliman_TpMissieMoustass \
             -Dsonar.organization=ben-sliman \
