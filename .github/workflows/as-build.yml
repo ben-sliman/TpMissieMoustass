@@ -25,9 +25,9 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
-          cmd /c gradlew.bat build
-          cmd /c gradlew.bat sonarqube \
-            -Dsonar.projectKey=ben-sliman_TpMissieMoustass \
-            -Dsonar.organization=ben-sliman \
-            -Dsonar.host.url=https://sonarcloud.io \
+          gradlew.bat build
+          gradlew.bat sonarqube ^
+            -Dsonar.projectKey=ben-sliman_TpMissieMoustass ^
+            -Dsonar.organization=ben-sliman ^
+            -Dsonar.host.url=https://sonarcloud.io ^
             -Dsonar.login=${{ secrets.SONAR_TOKEN }}
