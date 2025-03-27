@@ -288,3 +288,4 @@ public class Login extends JFrame {
         return hexString.toString(); // Retourner le mot de passe haché
     }
 }
+ 
