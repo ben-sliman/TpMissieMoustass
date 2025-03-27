@@ -1,6 +1,6 @@
 name: SonarCloud Scan
 
-on: 
+on:
   push:
     branches:
       - main
@@ -13,22 +13,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Checkout du code depuis GitHub
-      - name: Checkout code
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
-      # Configurer JDK 11
       - name: Set up JDK 11
         uses: actions/setup-java@v3
         with:
-          distribution: 'temurin'  # Distribution JDK Temurin
+          distribution: 'temurin'
           java-version: '11'
 
-      # Accorder la permission d'exécution à gradlew
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
 
-      # Cacher les paquets de SonarCloud pour accélérer le processus
       - name: Cache SonarCloud packages
         uses: actions/cache@v3
         with:
@@ -36,7 +31,6 @@ jobs:
           key: ${{ runner.os }}-sonar
           restore-keys: ${{ runner.os }}-sonar
 
-      # Cacher les paquets Gradle pour accélérer le processus
       - name: Cache Gradle packages
         uses: actions/cache@v3
         with:
@@ -44,13 +38,13 @@ jobs:
           key: ${{ runner.os }}-gradle
           restore-keys: ${{ runner.os }}-gradle
 
-      # Build et scan avec SonarCloud
       - name: Build and scan with SonarCloud
         env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}  # Le token SonarCloud secret
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
-          ./gradlew build --warning-mode all  # Construire le projet
-          ./gradlew sonarqube -Dsonar.projectKey=ben-sliman_TpMissieMoustass \
-                              -Dsonar.organization=ben-sliman \
-                              -Dsonar.host.url=https://sonarcloud.io \
-                              -Dsonar.login=${{ secrets.SONAR_TOKEN }}  # Scan avec SonarCloud
+          ./gradlew build
+          ./gradlew sonarqube \
+            -Dsonar.projectKey=your_project_key \
+            -Dsonar.organization=your_organization \
+            -Dsonar.host.url=https://sonarcloud.io \
+            -Dsonar.login=${{ secrets.SONAR_TOKEN }}
