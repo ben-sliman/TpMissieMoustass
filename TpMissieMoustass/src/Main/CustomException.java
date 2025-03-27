@@ -1,5 +1,5 @@
 package Main;
-
+ 
 // Classe CustomException pour gérer des cas spécifiques
 /**
  * Exception personnalisée pour gérer des erreurs spécifiques dans l'application.
