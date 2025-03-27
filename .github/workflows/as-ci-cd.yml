@@ -1,4 +1,4 @@
-name: Java CI/CD for Main Package (Windows)
+name: Java CI/CD (Windows ASLAN)
 
 on:
   push:
