@@ -4,8 +4,8 @@ plugins {
 
 sonar {
   properties {
-    property "sonar.projectKey", "askaiL60_askaiL60"
-    property "sonar.organization", "askail60"
+    property "sonar.projectKey", "ben-sliman_TpMissieMoustass"
+    property "sonar.organization", "ben-sliman"
     property "sonar.host.url", "https://sonarcloud.io"
   }
 }
