@@ -1,16 +1,16 @@
 plugins {
-    id "org.sonarqube" version "4.3.0"
+    id "org.sonarqube" version "3.0"  // Utilisation du plugin SonarQube
 }
 
 repositories {
-    mavenCentral()  // Ajoute ce dépôt pour récupérer les plugins
+    mavenCentral()  // Dépôt pour récupérer les dépendances
 }
 
 sonarqube {
     properties {
-        property "sonar.projectKey", "ben-sliman_TpMissieMoustass"
-        property "sonar.organization", "ben-sliman"
-        property "sonar.host.url", "https://sonarcloud.io"
-        property "sonar.login", System.getenv("SONAR_TOKEN")
+        property "sonar.projectKey", "ben-sliman_TpMissieMoustass"  // Clé de ton projet SonarCloud
+        property "sonar.organization", "ben-sliman"  // Organisation SonarCloud
+        property "sonar.host.url", "https://sonarcloud.io"  // URL de SonarCloud
+        property "sonar.login", System.getenv("SONAR_TOKEN")  // Utilisation du token d'authentification de SonarCloud
     }
 }
