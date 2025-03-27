@@ -1,5 +1,5 @@
 plugins {
-    id "org.sonarqube" version "4.3.0.3225" // Ajout du plugin SonarQube
+    id "org.sonar" version "4.3.0.3225" // Ajout du plugin SonarQube
 }
 
 sonarqube {
