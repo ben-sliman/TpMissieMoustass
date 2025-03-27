@@ -1,0 +1,21 @@
+INDEX VERSION 1.134+C:\Users\askai\Desktop\TpMissieMoustass\.metadata\.plugins\org.eclipse.jdt.core
+1806781075.index
+2398873136.index
+661895771.index
+2290624849.index
+3545810141.index
+1245294339.index
+1288848795.index
+1133761336.index
+473883047.index
+1998883763.index
+2279186930.index
+557490284.index
+911118755.index
+1330272626.index
+1865797976.index
+1816939686.index
+105411854.index
+1345696688.index
+4199626666.index
+1216589592.index
