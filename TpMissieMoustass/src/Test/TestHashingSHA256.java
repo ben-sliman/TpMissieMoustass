@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import Main.HashingSHA256; // Import de la classe HashingSHA256 depuis le package Main
 
 /**
- * Classe de test pour la méthode calculateHash dans HashingSHA256.
+ * Classe de test pour la méthode calculateHash et la vérification d'intégrité dans HashingSHA256.
  * Ce constructeur par défaut est utilisé par la JVM pour instancier la classe.
  */
 public class TestHashingSHA256 {
@@ -56,4 +56,49 @@ public class TestHashingSHA256 {
         }
     }
 
+    /**
+     * Teste la vérification de l'intégrité des données en comparant des données identiques.
+     */
+    @Test
+    public void testVerificationIntegriteDonneesIdentiques() {
+        try {
+            // Initialisation de la classe HashingSHA256
+            HashingSHA256 hashingSHA256 = new HashingSHA256();
+
+            // Données identiques
+            byte[] donneesOriginales = "Données identiques".getBytes();
+            byte[] donneesNouvelle = "Données identiques".getBytes();
+
+            // Vérifier que les données sont intactes
+            boolean integrite = hashingSHA256.verifyDataIntegrity(donneesOriginales, donneesNouvelle);
+
+            // L'intégrité doit être vraie pour des données identiques
+            assertTrue(integrite, "L'intégrité des données n'a pas été respectée alors que les données sont identiques !");
+        } catch (Exception e) {
+            fail("Exception inattendue : " + e.getMessage());
+        }
+    }
+
+    /**
+     * Teste la vérification de l'intégrité des données en comparant des données modifiées.
+     */
+    @Test
+    public void testVerificationIntegriteDonneesModifiees() {
+        try {
+            // Initialisation de la classe HashingSHA256
+            HashingSHA256 hashingSHA256 = new HashingSHA256();
+
+            // Données originales et données modifiées
+            byte[] donneesOriginales = "Données d'origine".getBytes();
+            byte[] donneesModifiees = "Données modifiées".getBytes();
+
+            // Vérifier que les données ont été modifiées (intégrité compromise)
+            boolean integrite = hashingSHA256.verifyDataIntegrity(donneesOriginales, donneesModifiees);
+
+            // L'intégrité doit être fausse pour des données modifiées
+            assertFalse(integrite, "L'intégrité des données est incorrectement validée pour des données modifiées !");
+        } catch (Exception e) {
+            fail("Exception inattendue : " + e.getMessage());
+        }
+    }
 }
